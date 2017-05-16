@@ -7,12 +7,14 @@
 http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
     <http:listener-config name="HTTP_Listener_Configuration" host="0.0.0.0" port="8081" doc:name="HTTP Listener Configuration"/>
-    <http:request-config name="HTTP_Request_Configuration" host="34.196.26.168" port="8080" doc:name="HTTP Request Configuration" basePath="flights"/>
+    <http:request-config name="HTTP_Request_Configuration" host="apdev-american-api.cloudhub.io" port="80" doc:name="HTTP Request Configuration" />
     <flow name="mulecredentialvaultdemoFlow">
-        <http:listener config-ref="HTTP_Listener_Configuration" path="/flight" doc:name="HTTP"/>
-        <http:request config-ref="HTTP_Request_Configuration" path="/" method="GET" doc:name="HTTP">
+        <http:listener config-ref="HTTP_Listener_Configuration" path="/flight" doc:name="HTTP" allowedMethods="GET"/>
+        <set-payload value="Testing" encoding="UTF-8" mimeType="application/json" doc:name="Set Payload"/>
+        <http:request config-ref="HTTP_Request_Configuration" path="/flights" method="GET" doc:name="HTTP">
             <http:request-builder>
-                <http:query-params expression="client_id=${client_id}&amp;client_secret=${client_secret}"/>
+                <http:query-param paramName="client_id" value="${client_id}"/>
+                <http:query-param paramName="client_secret" value="${client_secret}"/>
             </http:request-builder>
         </http:request>
     </flow>
